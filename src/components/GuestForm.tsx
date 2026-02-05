@@ -138,7 +138,7 @@ export function GuestForm({ onSubmit, nextEnvelopeNumber }: GuestFormProps) {
               setFormData(prev => ({ ...prev, name: val }));
             }}
             onKeyDown={(e) => handleKeyDown(e, amountInputRef)}
-            className="w-full px-6 py-6 text-4xl font-bold border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/30 focus:border-blue-600 transition-all shadow-sm placeholder-gray-300"
+            className="w-full px-6 py-6 text-5xl font-bold border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/30 focus:border-blue-600 transition-all shadow-sm placeholder-gray-300"
             placeholder="이름 입력"
             autoComplete="off"
             autoCorrect="off"
@@ -166,7 +166,7 @@ export function GuestForm({ onSubmit, nextEnvelopeNumber }: GuestFormProps) {
                   handleSubmit();
                 }
               }}
-              className="w-full px-6 py-6 text-4xl font-bold border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/30 focus:border-blue-600 transition-all shadow-sm text-right pr-16 placeholder-gray-300"
+              className="w-full px-6 py-6 text-5xl font-bold border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/30 focus:border-blue-600 transition-all shadow-sm text-right pr-16 placeholder-gray-300"
               placeholder="0 (선택)"
               autoComplete="off"
             />
@@ -202,27 +202,27 @@ export function GuestForm({ onSubmit, nextEnvelopeNumber }: GuestFormProps) {
           <label className="block text-base font-bold text-gray-700 ml-1">
             식권 (대/소인 공통)
           </label>
-          <div className="flex items-center gap-3">
-            <div className="flex-1 flex items-center justify-between bg-gray-50 border-2 border-gray-300 rounded-xl p-3">
+          <div className="flex items-center gap-2">
+            <div className="flex-1 flex items-center justify-between bg-gray-50 border-2 border-gray-100 rounded-xl p-1.5">
               <button
                 type="button"
                 onClick={() => adjustMealTickets(-1)}
-                className="w-20 h-20 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-100 text-gray-600 font-bold text-3xl rounded-lg transition-all touch-manipulation flex items-center justify-center shadow-sm"
+                className="px-3 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-100 text-gray-600 font-bold text-lg rounded-lg transition-all touch-manipulation flex items-center justify-center shadow-sm"
               >
                 −
               </button>
-              <span className="text-4xl font-black text-gray-800 min-w-[80px] text-center">
+              <span className="text-2xl font-black text-gray-800 min-w-[60px] text-center">
                 {formData.mealTickets}
               </span>
               <button
                 type="button"
                 onClick={() => adjustMealTickets(1)}
-                className="w-20 h-20 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold text-3xl rounded-lg transition-colors touch-manipulation flex items-center justify-center shadow-md"
+                className="px-3 py-2.5 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold text-lg rounded-lg transition-colors touch-manipulation flex items-center justify-center shadow-sm"
               >
                 +
               </button>
             </div>
-            <span className="text-2xl text-gray-500 font-medium whitespace-nowrap px-2">장</span>
+            <span className="text-lg text-gray-500 font-medium whitespace-nowrap px-1">장</span>
           </div>
         </div>
 
