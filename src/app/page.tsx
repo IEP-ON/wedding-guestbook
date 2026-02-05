@@ -1,65 +1,115 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { GuestForm } from '@/components/GuestForm';
+import { GuestList } from '@/components/GuestList';
+import { StatsCard } from '@/components/StatsCard';
+import { GuestbookDocument } from '@/components/GuestbookDocument';
+import { useWeddingData } from '@/hooks/useWeddingData';
+import { WeddingGuest } from '@/types/wedding';
+import { exportToCSV } from '@/utils/exportCSV';
 
 export default function Home() {
+  const { guests, isLoading, addGuest, removeGuest, updateGuest, getStats } = useWeddingData();
+  const [highlightId, setHighlightId] = useState<string>('');
+  const stats = getStats();
+
+  const nextEnvelopeNumber = guests.length > 0 
+    ? Math.max(...guests.map(g => g.envelopeNumber || 0)) + 1 
+    : 1;
+
+  useEffect(() => {
+    if (highlightId) {
+      const timer = setTimeout(() => {
+        setHighlightId('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [highlightId]);
+
+  const handleAddGuest = (guestData: Omit<WeddingGuest, 'id' | 'timestamp' | 'envelopeNumber'>) => {
+    const newGuest = addGuest(guestData);
+    setHighlightId(newGuest.id);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleExportCSV = () => {
+    const date = new Date().toISOString().slice(0, 10);
+    exportToCSV(guests, `축의금명부_${date}.csv`);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">로딩 중...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <>
+      <div className="h-screen flex flex-col bg-gray-50 overflow-hidden print:hidden">
+        {/* Header */}
+        <header className="bg-white border-b px-6 py-2 flex justify-between items-center shadow-sm z-10">
+          <h1 className="text-xl font-bold text-gray-900">축의금 기록부</h1>
+          
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportCSV}
+              disabled={guests.length === 0}
+              className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white rounded-lg transition-colors font-medium text-sm"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              CSV
+            </button>
+            <button
+              onClick={handlePrint}
+              disabled={guests.length === 0}
+              className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-900 disabled:bg-gray-300 text-white rounded-lg transition-colors font-medium text-sm"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              PDF
+            </button>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="flex-1 flex overflow-hidden">
+          {/* Left Panel - Input Form */}
+          <div className="w-[38%] bg-white border-r p-4 overflow-y-auto custom-scrollbar">
+            <GuestForm onSubmit={handleAddGuest} nextEnvelopeNumber={nextEnvelopeNumber} />
+          </div>
+
+          {/* Right Panel - Stats & List */}
+          <div className="w-[62%] bg-gray-50 p-4 flex flex-col overflow-hidden gap-4">
+            <div className="shrink-0">
+              <StatsCard stats={stats} />
+            </div>
+
+            <div className="flex-1 overflow-hidden bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+              <GuestList 
+                guests={guests} 
+                onDelete={removeGuest}
+                onUpdate={updateGuest}
+                highlightId={highlightId}
+              />
+            </div>
+          </div>
+        </main>
+      </div>
+
+      {/* Hidden Print Document */}
+      <GuestbookDocument guests={guests} />
+    </>
   );
 }

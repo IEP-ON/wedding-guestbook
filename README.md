@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💐 축의금 기록부
 
-## Getting Started
+결혼식 축의금을 쉽고 빠르게 기록하는 웹 애플리케이션입니다. iPad Pro 12.9인치 가로모드에 최적화되어 있으며, 바코드 스캐닝 없이 수기 입력으로 빠르게 데이터를 기록할 수 있습니다.
 
-First, run the development server:
+## ✨ 주요 기능
+
+- 📝 **빠른 입력**: 이름, 금액, 관계, 메시지를 간단히 입력
+- 📊 **실시간 통계**: 참석자 수, 총액, 평균 금액 즉시 확인
+- 📱 **반응형 디자인**: iPad Pro 가로모드 최적화, 모바일 지원
+- 💾 **로컬 저장**: 브라우저에 데이터 저장, 별도 서버 불필요
+- 🎯 **터치 최적화**: 큰 버튼과 입력창으로 터치 사용 편의성 극대화
+
+## 🚀 시작하기
+
+### 개발 환경 실행
 
 ```bash
 npm run dev
-# or
+# 또는
 yarn dev
-# or
+# 또는
 pnpm dev
-# or
+# 또는
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[http://localhost:3000](http://localhost:3000)에서 앱을 확인하세요.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 빌드
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## 📱 사용 환경
 
-To learn more about Next.js, take a look at the following resources:
+- **최적**: iPad Pro 12.9인치 (가로모드)
+- **지원**: 모든 태블릿 및 데스크톱 브라우저
+- **모바일**: 기본 기능 지원
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ 기술 스택
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **프레임워크**: Next.js 15 (App Router)
+- **스타일링**: Tailwind CSS
+- **언어**: TypeScript
+- **데이터 저장**: LocalStorage
+- **배포**: Vercel 권장
 
-## Deploy on Vercel
+## 📋 기능 설명
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 축의금 등록
+- 이름과 금액은 필수 입력
+- 관계(신랑측/신부측/친구 등) 선택적 입력
+- 축하 메시지 선택적 입력
+- 금액 자동 포맷팅 (1,000원 단위 콤마)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 목록 관리
+- 실시간 목록 업데이트
+- 개별 항목 삭제 기능
+- 시간순 정렬 (최신순)
+- 스크롤 가능한 목록
+
+### 🖨️ 방명록 출력
+- **A4 최적화**: 인쇄 시 자동으로 A4 규격 방명록 양식으로 변환
+- **고급 디자인**: 명조체 적용, 표 형식 정리, 결재 라인 포함
+- **PDF 저장**: 인쇄 메뉴에서 PDF로 저장하여 영구 보관 가능
+
+### 통계 정보
+- 총 참석자 수
+- 총 축의금 액수
+- 평균 축의금 액수
+- 그라데이션 카드 디자인
+
+## 🎨 디자인 특징
+
+- **아이패드 최적화**: 12.9인치 가로모드 레이아웃
+- **터치 친화적**: 44px 이상의 터치 타겟
+- **시인성**: 큰 글자와 명확한 대비
+- **간결한 UI**: 불필요한 요소 제거, 핵심 기능 집중
+
+## 📦 배포
+
+### Vercel 배포 (권장)
+
+1. GitHub에 코드 푸시
+2. [Vercel](https://vercel.com)에서 프로젝트 임포트
+3. 자동 배포 완료
+
+### 수동 배포
+
+```bash
+npm run build
+```
+
+빌드된 `.next` 폴더를 호스팅 서버에 업로드하세요.
+
+## 🔧 개발 참고사항
+
+- 데이터는 브라우저 LocalStorage에 저장됩니다
+- 서버 사이드 기능이 없어 개인정보 보호에 안전합니다
+- 오프라인 환경에서도 동작합니다
+- 새로고침 시 데이터가 유지됩니다
+
+## 📄 라이선스
+
+MIT License
+
+---
+
+💕 행복한 결혼식을 응원합니다!
