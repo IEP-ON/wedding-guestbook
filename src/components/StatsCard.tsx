@@ -23,14 +23,14 @@ export function StatsCard({ stats }: StatsCardProps) {
 
   return (
     <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl p-4 text-white shadow-lg">
-      <div className="grid grid-cols-4 gap-2 text-center">
-        <div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-2 text-center">
+        <div className="p-2 bg-white/5 rounded-lg md:bg-transparent md:p-0">
           <div className="text-2xl font-bold">{stats.totalGuests}</div>
           <div className="text-xs opacity-80">인원</div>
         </div>
         
         <div 
-          className="border-x border-white/20 cursor-pointer hover:bg-white/10 rounded transition-colors"
+          className="p-2 bg-white/5 rounded-lg md:bg-transparent md:p-0 md:border-x md:border-white/20 cursor-pointer hover:bg-white/10 transition-colors"
           onClick={toggleSensitive}
           title="클릭하여 표시/숨김"
         >
@@ -41,7 +41,7 @@ export function StatsCard({ stats }: StatsCardProps) {
         </div>
         
         <div 
-          className="border-r border-white/20 cursor-pointer hover:bg-white/10 rounded transition-colors"
+          className="p-2 bg-white/5 rounded-lg md:bg-transparent md:p-0 md:border-r md:border-white/20 cursor-pointer hover:bg-white/10 transition-colors"
           onClick={toggleSensitive}
           title="클릭하여 표시/숨김"
         >
@@ -51,7 +51,7 @@ export function StatsCard({ stats }: StatsCardProps) {
           <div className="text-xs opacity-80">평균 {!showSensitive && '🔒'}</div>
         </div>
 
-        <div>
+        <div className="p-2 bg-white/5 rounded-lg md:bg-transparent md:p-0">
           <div className="text-2xl font-bold">{stats.totalMealTickets}</div>
           <div className="text-xs opacity-80">식권</div>
         </div>

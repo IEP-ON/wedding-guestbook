@@ -85,13 +85,13 @@ export default function Home() {
 
         {/* Main Content */}
         <main className="flex-1 flex overflow-hidden">
-          {/* Left Panel - Input Form */}
-          <div className="w-[38%] bg-white border-r p-4 overflow-y-auto custom-scrollbar">
+          {/* Left Panel - Input Form (Hidden on mobile) */}
+          <div className="hidden md:block md:w-[38%] bg-white border-r p-4 overflow-y-auto custom-scrollbar">
             <GuestForm onSubmit={handleAddGuest} nextEnvelopeNumber={nextEnvelopeNumber} />
           </div>
 
-          {/* Right Panel - Stats & List */}
-          <div className="w-[62%] bg-gray-50 p-4 flex flex-col overflow-hidden gap-4">
+          {/* Right Panel - Stats & List (Full width on mobile) */}
+          <div className="w-full md:w-[62%] bg-gray-50 p-4 flex flex-col overflow-hidden gap-4">
             <div className="shrink-0">
               <StatsCard stats={stats} />
             </div>
