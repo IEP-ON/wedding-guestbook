@@ -122,71 +122,30 @@ export function GuestForm({ onSubmit, nextEnvelopeNumber }: GuestFormProps) {
         </button>
       </div>
 
-      {/* 안내문구 */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-2.5 text-sm text-center">
-        <div className="flex items-center justify-center gap-2 text-amber-900 font-medium">
-          <span>🍽️ 7세 이하 무료</span>
-          <span className="text-amber-300">|</span>
-          <span>🚗 주차 2시간 (도장)</span>
-        </div>
-      </div>
-
       <div className="flex-1 space-y-5 overflow-y-auto px-1 py-1">
-        {/* 이름 입력 (경필 쓰기 그리드) */}
+        {/* 이름 입력 */}
         <div className="space-y-1.5">
           <label htmlFor="name" className="block text-base font-bold text-gray-700 ml-1">
             성명 <span className="text-red-500">*</span>
           </label>
-          <div className="relative">
-            {/* 투명 입력 오버레이 */}
-            <input
-              ref={nameInputRef}
-              type="text"
-              id="name"
-              value={formData.name}
-              onChange={(e) => {
-                const val = e.target.value.slice(0, 10); // 최대 10글자
-                setFormData(prev => ({ ...prev, name: val }));
-              }}
-              onKeyDown={(e) => handleKeyDown(e, amountInputRef)}
-              className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-text caret-transparent"
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck={false}
-              required
-              maxLength={10}
-            />
-            
-            {/* 시각적 그리드 (5x2) */}
-            <div className="grid grid-cols-5 gap-2">
-              {Array.from({ length: 10 }).map((_, i) => {
-                const char = formData.name[i] || '';
-                const isNext = i === formData.name.length; // 현재 입력 대기 중인 칸
-                const isFilled = i < formData.name.length;
-                
-                return (
-                  <div
-                    key={i}
-                    className={`
-                      aspect-square flex items-center justify-center text-3xl font-black rounded-xl border-2 transition-all
-                      ${isNext ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200 shadow-md transform scale-105 z-0' : ''}
-                      ${isFilled ? 'border-gray-800 bg-white text-gray-900' : 'border-gray-200 bg-gray-50'}
-                      ${!isFilled && !isNext ? 'bg-gray-100/30' : ''}
-                    `}
-                  >
-                    {char}
-                  </div>
-                );
-              })}
-            </div>
-            
-            {/* 안내 텍스트 */}
-            {!formData.name && (
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xl font-bold whitespace-nowrap z-0">
-                이름 입력 (펜슬/키보드)
-              </div>
-            )}
-          </div>
+          <input
+            ref={nameInputRef}
+            type="text"
+            id="name"
+            value={formData.name}
+            onChange={(e) => {
+              const val = e.target.value.slice(0, 10);
+              setFormData(prev => ({ ...prev, name: val }));
+            }}
+            onKeyDown={(e) => handleKeyDown(e, amountInputRef)}
+            className="w-full px-4 py-4 text-3xl font-bold border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/30 focus:border-blue-600 transition-all shadow-sm placeholder-gray-300"
+            placeholder="이름 입력"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+            required
+            maxLength={10}
+          />
         </div>
 
         {/* 금액 입력 */}
