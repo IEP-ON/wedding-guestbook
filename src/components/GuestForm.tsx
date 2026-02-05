@@ -138,7 +138,7 @@ export function GuestForm({ onSubmit, nextEnvelopeNumber }: GuestFormProps) {
               setFormData(prev => ({ ...prev, name: val }));
             }}
             onKeyDown={(e) => handleKeyDown(e, amountInputRef)}
-            className="w-full px-6 py-6 text-5xl font-bold border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/30 focus:border-blue-600 transition-all shadow-sm placeholder-gray-300"
+            className="w-full px-6 py-6 text-6xl font-bold border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/30 focus:border-blue-600 transition-all shadow-sm placeholder-gray-300"
             placeholder="이름 입력"
             autoComplete="off"
             autoCorrect="off"
@@ -166,7 +166,7 @@ export function GuestForm({ onSubmit, nextEnvelopeNumber }: GuestFormProps) {
                   handleSubmit();
                 }
               }}
-              className="w-full px-6 py-6 text-5xl font-bold border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/30 focus:border-blue-600 transition-all shadow-sm text-right pr-16 placeholder-gray-300"
+              className="w-full px-6 py-6 text-6xl font-bold border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/30 focus:border-blue-600 transition-all shadow-sm text-right pr-16 placeholder-gray-300"
               placeholder="0 (선택)"
               autoComplete="off"
             />
