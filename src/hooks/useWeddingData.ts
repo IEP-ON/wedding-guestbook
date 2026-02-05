@@ -2,60 +2,134 @@
 
 import { useState, useEffect } from 'react';
 import { WeddingGuest, WeddingStats } from '@/types/wedding';
-
-const STORAGE_KEY = 'wedding-guests';
+import { supabase } from '@/lib/supabase';
 
 export function useWeddingData() {
   const [guests, setGuests] = useState<WeddingGuest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        const parsedGuests = JSON.parse(stored).map((guest: any) => ({
-          ...guest,
+  const fetchGuests = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('guests')
+        .select('*')
+        .order('timestamp', { ascending: false });
+
+      if (error) throw error;
+
+      if (data) {
+        const parsedGuests: WeddingGuest[] = data.map(guest => ({
+          id: guest.id,
+          envelopeNumber: guest.envelope_number,
+          name: guest.name,
+          amount: guest.amount,
+          mealTickets: guest.meal_tickets,
+          message: guest.message,
           timestamp: new Date(guest.timestamp)
         }));
         setGuests(parsedGuests);
-      } catch (error) {
-        console.error('Failed to load wedding data:', error);
       }
+    } catch (error) {
+      console.error('Failed to fetch guests:', error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
-  }, []);
-
-  const saveGuests = (newGuests: WeddingGuest[]) => {
-    setGuests(newGuests);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newGuests));
   };
 
-  const addGuest = (guest: Omit<WeddingGuest, 'id' | 'timestamp' | 'envelopeNumber'>) => {
+  useEffect(() => {
+    fetchGuests();
+
+    const channel = supabase
+      .channel('wedding-guests-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'guests'
+        },
+        () => {
+          fetchGuests();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const addGuest = async (guestData: Omit<WeddingGuest, 'id' | 'timestamp' | 'envelopeNumber'>) => {
     const maxEnvelopeNumber = guests.length > 0 
       ? Math.max(...guests.map(g => g.envelopeNumber || 0)) 
       : 0;
+    
+    const newEnvelopeNumber = maxEnvelopeNumber + 1;
+
+    const { data, error } = await supabase
+      .from('guests')
+      .insert([
+        {
+          name: guestData.name,
+          amount: guestData.amount,
+          meal_tickets: guestData.mealTickets,
+          message: guestData.message,
+          envelope_number: newEnvelopeNumber,
+          timestamp: new Date().toISOString()
+        }
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error adding guest:', error);
+      throw error;
+    }
+
     const newGuest: WeddingGuest = {
-      ...guest,
-      id: Date.now().toString(),
-      envelopeNumber: maxEnvelopeNumber + 1,
-      timestamp: new Date()
+      id: data.id,
+      envelopeNumber: data.envelope_number,
+      name: data.name,
+      amount: data.amount,
+      mealTickets: data.meal_tickets,
+      message: data.message,
+      timestamp: new Date(data.timestamp)
     };
-    saveGuests([...guests, newGuest]);
+    
     return newGuest;
   };
 
-  const removeGuest = (id: string) => {
-    saveGuests(guests.filter(guest => guest.id !== id));
+  const removeGuest = async (id: string) => {
+    const { error } = await supabase
+      .from('guests')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error removing guest:', error);
+    }
   };
 
-  const updateGuest = (id: string, updates: Partial<WeddingGuest>) => {
-    saveGuests(guests.map(guest => 
-      guest.id === id ? { ...guest, ...updates } : guest
-    ));
+  const updateGuest = async (id: string, updates: Partial<WeddingGuest>) => {
+    const dbUpdates: any = {};
+    if (updates.name !== undefined) dbUpdates.name = updates.name;
+    if (updates.amount !== undefined) dbUpdates.amount = updates.amount;
+    if (updates.mealTickets !== undefined) dbUpdates.meal_tickets = updates.mealTickets;
+    if (updates.message !== undefined) dbUpdates.message = updates.message;
+    if (updates.envelopeNumber !== undefined) dbUpdates.envelope_number = updates.envelopeNumber;
+
+    const { error } = await supabase
+      .from('guests')
+      .update(dbUpdates)
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error updating guest:', error);
+    }
   };
 
-  const clearAll = () => {
-    saveGuests([]);
+  const clearAll = async () => {
+    // 안전을 위해 구현하지 않음
   };
 
   const getStats = (): WeddingStats => {

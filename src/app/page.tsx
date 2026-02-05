@@ -27,8 +27,8 @@ export default function Home() {
     }
   }, [highlightId]);
 
-  const handleAddGuest = (guestData: Omit<WeddingGuest, 'id' | 'timestamp' | 'envelopeNumber'>) => {
-    const newGuest = addGuest(guestData);
+  const handleAddGuest = async (guestData: Omit<WeddingGuest, 'id' | 'timestamp' | 'envelopeNumber'>) => {
+    const newGuest = await addGuest(guestData);
     setHighlightId(newGuest.id);
   };
 
